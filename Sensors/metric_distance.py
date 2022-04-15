@@ -15,7 +15,7 @@ def main():
     # temperature = 20 (room temp in Celsius)
 
     #  Create a distance reading with the hcsr04 sensor module
-    value = ultra.Measurement(trig_pin, echo_pin)
+    value = Ultrasonic.Measurement(trig_pin, echo_pin)
     raw_measurement = value.raw_distance()
 
     # To overide default room temp you can pass the following to value
