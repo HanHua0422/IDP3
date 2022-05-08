@@ -1,18 +1,33 @@
-import RPi.GPIO as GPIO
-import time
+from gpiozero import Robot, LineSensor
+from signal import pause
+from time import sleep
 
-GPIO.setmode(GPIO.BCM)
+# GPIO pins
+# Assign pins to left and right motors
+robot = Robot(left=(7, 8), right=(9, 10))
 
-GPIO.setup(26,GPIO.IN)
+# Assign pins to infrared sensors
+left_sensor = LineSensor(17)
+right_sensor= LineSensor(27)
 
-ir_sensor =  GPIO.input(26)
-
-def main():
-  while True:
+# Constant loop
+while True:
+  left_detect = int(left_sensor.value)
+  right_detect = int(right_sensor.value)
   
-    if sensor ==  1:
-      print("Line detected")
-    
-      else:
-        print("Line not detected")
-      
+# Possible scenarios
+# 1: left detects, right doesn't detect
+  if left_sensor.when_line and right_sensor.when_no_line:
+    robot.turn_left()
+
+# 2: right detects, left doesn't detect
+  elif left_sensor.when_no_line and right_sensor.when_line:
+    robot.turn_right()
+
+# 3: left and right detect
+  elif left_sensor.when_line and right_sensor.when_line:
+    robot.move_forward()
+  
+# 4: left and right don't detect
+  elif left_sensor.when_no_line and left_sensor.when_no_line:
+    robot.stop()
